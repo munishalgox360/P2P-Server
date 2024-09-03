@@ -102,7 +102,7 @@ router.post("/login", async (req, res) => {
         return res.status(200).json({ status: 401, message: "All fields required" });
     }
 
-    if(usertype == "driver"){
+    if(usertype == "Driver"){
       userDetail = await DriverSchema.findOne({ mobileNumber : mobileNumber });
     }else{
       userDetail = await UserSchema.findOne({ mobileNumber : mobileNumber });
@@ -195,7 +195,7 @@ router.get("/getlist", verifyToken, async (req, res) => {
   let records;
 
   try {
-    if(usertype == "driver"){
+    if(usertype == "Driver"){
       records = await DriverSchema.countDocuments();
       userDetail = await DriverSchema.find({}).skip((1 - page) * 20).limit(20).populate("vehSegment"); 
     }else{

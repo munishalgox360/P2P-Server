@@ -301,7 +301,7 @@ router.get("/passenger/:id/:usertype", verifyToken, async (req, res) => {
     let Rides;
 
     try {
-        if(usertype == "driver"){
+        if(usertype == "Driver"){
             Rides = await MyRidesSchema.find({ driverId : id });
         }else{
             Rides = await MyRidesSchema.find({ userId : id });
