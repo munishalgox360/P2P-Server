@@ -5,12 +5,11 @@
 <h3>Cab Booking Application</h3>
 
 ## Local Development Server
-### git clone https://github.com/munishalgox360/P2P-Server.git
-### npm install 
-### npm start
-
+``` git clone https://github.com/munishalgox360/P2P-Server.git ```
+``` npm install ```
+``` npm start ```
 
 ## Live Development Server
-### sudo git clone https://github.com/munishalgox360/P2P-Server.git
-### sudo npm install 
-### sudo npm start
+``` sudo git clone https://github.com/munishalgox360/P2P-Server.git ```
+``` sudo npm install ```
+``` sudo npm start ```
