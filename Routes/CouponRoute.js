@@ -6,7 +6,7 @@ const CouponSchema = require("../Mongooes/CouponSchema.js");
 
 
 
-// Create Festival Coupon
+// Festival Coupon
 router.post("/create", verifyToken, async (req, res) => {
   try {
     const  { title, discount, purpose } = req.body;

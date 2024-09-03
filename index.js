@@ -5,7 +5,7 @@ const cors = require("cors");
 const path = require("path");
 const fs = require("fs");
 const { Server } = require("socket.io");
-const { createServer } = require('node:http');
+const { createServer } = require('node:https');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -31,7 +31,7 @@ const Logs = require("./Routes/logRoute.js");
 // Database Connection
 const mongoDBConnect = async() => {
   try{
-    await mongoose.connect(process.env.Mongo_Manish,{
+    await mongoose.connect(process.env.MONGO_LIVE_URL,{
       useNewUrlParser: true,
       useUnifiedTopology: true,
       serverSelectionTimeoutMS: 3000,
@@ -66,9 +66,9 @@ app.use("/log", Logs);
 
 
 // WebSocket
-// const privateKey = fs.readFileSync('/etc/letsencrypt/live/kambojproperty.com/privkey.pem', 'utf8');
-// const certificate = fs.readFileSync('/etc/letsencrypt/live/kambojproperty.com/fullchain.pem', 'utf8');
-// const credentials = { key: privateKey, cert: certificate };
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/kambojproperty.com/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('/etc/letsencrypt/live/kambojproperty.com/fullchain.pem', 'utf8');
+const credentials = { key: privateKey, cert: certificate };
 const server = createServer(app);
 var io = new Server(server, { cors : { origin : "*", methods : ["GET", "PUT", "POST", "DELETE"], credentials : true }});
 
