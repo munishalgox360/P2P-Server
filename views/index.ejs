@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    
+    <h1> Connection </h1>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+        
+        const socket = io();
+        socket.emit("client", "Hello from client");
+        
+        socket.on("accept", function(message){
+            console.log(message);
+        })
+        socket.emit("setUserIds", "66581f09833846d255ec998e");
+        
+
+    </script>
+
+</body>
+
+</html>
