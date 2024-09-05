@@ -47,7 +47,7 @@ router.post("/register/passenger", async (req, res) => {
       return res.status(200).json({ status: 401, message: "Not Created", data: createResponse });
     }
   } catch (error) {
-    res.status(500).json({ error: error.message, message: "Registeration Failed(50)" });
+    res.status(500).json({ error: error.message, message: "Registeration Failed" });
   }
 });
 
@@ -88,7 +88,7 @@ router.post("/register/driver", async (req, res) => {
       return res.status(200).json({ status: 401, message: "Not Created", data: createResponse });
     }
   } catch (error) {
-    res.status(500).json({ error: error.message, message: "Registeration Failed(91)" });
+    res.status(500).json({ error: error.message, message: "Registeration Failed" });
   }
 });
 
@@ -110,7 +110,7 @@ router.post("/login", async (req, res) => {
     
 
     if (!userDetail) {
-      return res.status(200).json({ status: 401, message: usertype + "Not Found" });
+      return res.status(200).json({ status: 401, message: usertype + " Not Found" });
     }
 
     const isPassword = await bcrypt.compare(password, userDetail.password);
@@ -122,7 +122,7 @@ router.post("/login", async (req, res) => {
     const token = await accessToken(userDetail);
     res.status(200).json({ status: 201, message: "Success", token: token, data: userDetail });
   } catch (error) {
-    res.status(500).json({ error: error.message, message: "Login Failed(125)" });
+    res.status(500).json({ error: error.message, message: "Login Failed" });
   }
 });
 
@@ -153,7 +153,7 @@ router.put("/verifydriver", verifyToken,  async (req, res) => {
 
     res.status(200).json({ status : 201, message : "Success", data : driverDetail });
   } catch (error) {
-    res.status(500).json({ error: error.message, message : "Not Verified - Failed(156)" });
+    res.status(500).json({ error: error.message, message : "Not Verified - Failed" });
   }
 });
 
@@ -170,7 +170,7 @@ router.get("/passengerinfo/:id", verifyToken, async (req, res) => {
   
       return res.status(200).json({ status: 201, message: "Success", data: passenger });
   } catch (error) {
-    res.status(500).json({ error: error.message, message: "Fetch User Info - Failed(173)" });
+    res.status(500).json({ error: error.message, message: "Fetch User Info - Failed" });
   }
 });
 
@@ -185,7 +185,7 @@ router.get("/driverinfo/:id", verifyDriver, async (req, res) => {
   
       return res.status(200).json({ status: 201, message: "Success", data: driver });
   } catch (error) {
-    res.status(500).json({ error: error.message, message: "Fetch User Info - Failed(188)" });
+    res.status(500).json({ error: error.message, message: "Fetch User Info - Failed" });
   }
 });
 
@@ -227,7 +227,7 @@ router.put("/dutystatus/:id", verifyDriver, async (req, res) => {
     
     res.status(200).json({ status: 201, message: "Success", data: updateResp });
   } catch (error) {
-    res.status(500).json({ error: error.message, message: "Not Updated - Failed(230)" });
+    res.status(500).json({ error: error.message, message: "Not Updated - Failed" });
   }
 });
 
@@ -252,7 +252,7 @@ router.put("/passengerlocation/:id", verifyToken, async (req, res) => {
 
     res.status(200).json({ status : 201, message : "Success", data : locationUpdate });
   } catch (error) {
-      res.status(500).json({ error:  error.message, message : "Not Updated - Failed(255)" });
+      res.status(500).json({ error:  error.message, message : "Not Updated - Failed" });
   }
 });
 
@@ -273,7 +273,7 @@ router.put("/driverlocation/:id", verifyDriver, async (req, res) => {
 
     res.status(200).json({ status : 201, message : "Success", data : locationUpdate });
   } catch (error) {
-      res.status(500).json({ error:  error.message, message : "Not Updated - Failed(276)" });
+      res.status(500).json({ error:  error.message, message : "Not Updated - Failed" });
   }
 });
 
@@ -296,7 +296,7 @@ router.put("/update/passenger/:id",  async (req, res) => {
 
     res.status(200).json({ status: 201, message: "Success", data: updateResponse });
   } catch (error) {
-    res.status(500).json({ error: error.message, message:  "Not Updated - Failed(299)" });
+    res.status(500).json({ error: error.message, message:  "Not Updated - Failed" });
   }
 });
 
@@ -314,7 +314,7 @@ router.put("/update/driver/:id",  async (req, res) => {
 
     res.status(200).json({ status: 201, message: "Success", data: updateResponse });
   } catch (error) {
-    res.status(500).json({ error: error.message, message:  "Not Updated - Failed(317)" });
+    res.status(500).json({ error: error.message, message:  "Not Updated - Failed" });
   }
 });
 

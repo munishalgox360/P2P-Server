@@ -28,7 +28,7 @@ router.post("/create", verifyToken, async (req, res) => {
     res.status(200).json({ status: 201, message: "Success", data: createResp });
 
   } catch (error) {
-    res.status(500).json({ error: error.message,  message : "Failed to create coupon(31)" });
+    res.status(500).json({ error: error.message,  message : "Failed to create coupon" });
   }
 });
 
@@ -40,7 +40,7 @@ router.get("/all", verifyToken, async (req, res) => {
     if(CouponData) res.status(200).json({ stauts: 201, message: "Success", data: CouponData });
 
   } catch (error) {
-    res.status(500).json({ error: error.message,  message : "Failed to get coupon(46)" });
+    res.status(500).json({ error: error.message,  message : "Failed to get coupon" });
   }
 });
 
@@ -60,7 +60,7 @@ router.put("/update", verifyToken, async (req, res) => {
 
     res.status(200).json({ status: 201,  message: "Success", data: updatedCoupon });
   } catch (error) {
-    res.status(500).json({ error: error.message,  message : "Failed to update coupon(68)" });
+    res.status(500).json({ error: error.message,  message : "Failed to update coupon" });
   }
 });
 
@@ -76,7 +76,7 @@ router.delete("/delete/:couponId", verifyToken, async (req, res) => {
 
     res.status(200).json({ status: 201, message: "Success", data: deletedCoupon });
   } catch (error) {
-    res.status(500).json({ error: error.message,  message : "Failed to delete coupon(87)" });
+    res.status(500).json({ error: error.message,  message : "Failed to delete coupon" });
   }
 });
 

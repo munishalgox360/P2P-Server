@@ -36,21 +36,21 @@ let SocketConfg = {
         });
     },
 
-    SendMessage : async function(driverId, message){
+    SendMessage : async function(userId, event, message){
         try {
-            const driver = await SocketIdSchema.findOne({ userId : driverId });
+            const user = await SocketIdSchema.findOne({ userId : userId });
            
-            if (!driver) {
-                console.log("Driver not found : ", driverId);
+            if (!user) {
+                console.log("Not found : ", userId);
                 return false;
             }
 
-            if (!driver.socketId) {
-                console.log("Socket ID not found for driver:", driver);
+            if (!user.socketId) {
+                console.log("Socket ID not found : ", user);
                 return false;
             }
 
-            io.to(driver.socketId).emit("newride", message);
+            io.to(user.socketId).emit(event, message);
             return true;
             
         } catch (error) {

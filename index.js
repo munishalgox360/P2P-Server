@@ -69,7 +69,7 @@ app.use("/log", Logs);
 const privateKey = fs.readFileSync('/etc/letsencrypt/live/kambojproperty.com/privkey.pem', 'utf8');
 const certificate = fs.readFileSync('/etc/letsencrypt/live/kambojproperty.com/fullchain.pem', 'utf8');
 const credentials = { key: privateKey, cert: certificate };
-const server = createServer(credentials, app);
+const server = createServer(credentials ,app);
 var io = new Server(server, { cors : { origin : "*", methods : ["GET", "PUT", "POST", "DELETE"], credentials : true }});
 
 

@@ -46,6 +46,14 @@ const myRidesHistorySchema = new mongoose.Schema({
   confirm: {
     type: Boolean,
     default: false
+  },
+  rating: {
+    type: Number,
+    default: 0
+  },
+  comment: {
+    type: String,
+    default: "comment"
   }
 }, { timestamps: true });
 

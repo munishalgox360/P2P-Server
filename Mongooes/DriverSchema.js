@@ -48,6 +48,10 @@ const driverSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    rating : {
+        type : Number,
+        default : 0
+    },
     verify: {
         type: Boolean,
         default: false
