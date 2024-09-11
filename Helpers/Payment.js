@@ -9,23 +9,28 @@ const Rzpay = new Razorpay({
 
 // QR Code & Customer
 async function NewQrCode(details) {
+  try {
+    const customerExists = await Rzpay.customers.fetch(details.rzpay_custId);
+    if(customerExists) {
+      console.log("Customer Already Exists"); return;
+    }
 
-  const customer = await Rzpay.customers.create({
-    name: details.name,
-    email: details.email,
-    mobile: details.mobile,
-    fail_existing: 0
-  });
+    const customer = await Rzpay.customers.create({
+      name: details.firstName, email: details.email,
+      fail_existing: 0
+    });
+  
 
-  const qrcode = await Rzpay.qrCode.create({
-    type: "upi_qr",
-    name: customer.name,
-    payment_amount: 2000,
-    customer_id: customer.id,
-    fail_existing: 0
-  });
+    const qrcode = await Rzpay.qrCode.create({
+      type: "upi_qr", name: customer.name, usage: "multiple_use",
+      fixed_amount: false, customer_id: customer.id
+    });
 
-  return { customer, qrcode };
+    return { customer, qrcode };
+    
+  } catch (error) {
+    console.log( "QrCode and Customer" ,error);
+  }
 }
 
 

@@ -20,6 +20,10 @@
         socket.on("accept", function(message){
             console.log(message);
         })
+
+        socket.on("complete", function(message){
+            console.log(message);
+        })
         socket.emit("setUserIds", "66581f09833846d255ec998e");
         
 

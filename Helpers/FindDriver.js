@@ -2,7 +2,6 @@ const DriverSchema = require("../Mongooes/DriverSchema.js");
 const mongoose = require("mongoose");
 
 // Filter Drivers within 5km area
-// Filter Drivers within 5km area
 async function FindDriver(passenger, segment){
     const segmentId = new mongoose.Types.ObjectId(segment);
 

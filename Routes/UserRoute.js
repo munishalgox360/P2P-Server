@@ -7,6 +7,8 @@ const bcrypt = require("bcryptjs");
 const { NewOTP } = require("../Helpers/OTP-Token.js");
 const NotifyService = require("../Helpers/NotificationService.js");
 const { NewQrCode } = require("../Helpers/Payment.js");
+const { CalculateDistance } = require("../Helpers/DistanceCalculate.js");
+const SocketConfg = require("../Helpers/websocket.js");
 const date = new Date();
 
 
@@ -137,14 +139,16 @@ router.put("/verifydriver", verifyToken,  async (req, res) => {
       return res.status(200).json({ status : 401, message : "Not Found"});
     }
 
-    // const { customer, qrcode } = await NewQrCode(driverExist);
+
+    const { customer, qrcode } = await NewQrCode(driverExist);
 
     const fieldToUpdate = {
       verify : verify,
-      // rzpay_custId : customer._id,
-      // qrcode_Id : qrcode._id,
-      // qrcode : qrcode.image_url
+      rzpay_custId : customer.id,
+      qrcode_Id : qrcode.id,
+      qrcode : qrcode.image_url
     }
+
 
     const driverDetail = await DriverSchema.findByIdAndUpdate({ _id : driverId }, fieldToUpdate, { new : true });
     if(!driverDetail){
@@ -234,7 +238,7 @@ router.put("/dutystatus/:id", verifyDriver, async (req, res) => {
 
 
 
-// Update
+// Update Locations
 router.put("/passengerlocation/:id", verifyToken, async (req, res) => {
   const { longitude, latitude } = req.body;
   const id = req.params.id;
@@ -256,15 +260,28 @@ router.put("/passengerlocation/:id", verifyToken, async (req, res) => {
   }
 });
 
+
+
 router.put("/driverlocation/:id", verifyDriver, async (req, res) => {
-  const { longitude, latitude } = req.body;
+
+  const { cLongitude, cLatitude, dLongitude, dLatitude } = req.body;
   const id = req.params.id;
 
   try {
     const location = {
       type : "Point",
-      coordinates : [ longitude, latitude ]    // First Longitude -- Second Latitude
+      coordinates : [ cLongitude, cLatitude ]  
     };
+
+    
+    if(dLongitude && dLatitude){
+      const distance = await CalculateDistance(cLatitude, cLongitude, dLatitude, dLongitude);
+      
+      if(distance <= 100){
+        await SocketConfg.SendMessage(id, "complete", { msg : "rideComplete" });
+      }
+    }
+    
 
     const locationUpdate = await DriverSchema.findByIdAndUpdate({ _id : id }, { location }, { new : true });
     if(!locationUpdate){
@@ -281,7 +298,7 @@ router.put("/driverlocation/:id", verifyDriver, async (req, res) => {
 
 
 
-
+// Update Profile
 router.put("/update/passenger/:id",  async (req, res) => {
   try {
     const userId = req.params.id;

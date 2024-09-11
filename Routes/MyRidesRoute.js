@@ -220,76 +220,6 @@ router.put("/confirm/:id", verifyToken, async (req, res) => {
 
 
 
-// Complete Ride --- Driver Side
-router.get("/completeRide/:id", verifyDriver, async (req, res) => {
-    const _id = req.params.id;
-
-    try {
-        const fieldToUpdate = {
-            completed : true,
-            start : false,
-            accept : false
-        };
-
-        const rideComplete = await MyRidesSchema.findByIdAndUpdate(_id, fieldToUpdate, { new : true });
-        if(!rideComplete){
-            return res.status(200).json({ status : 401, message : "Ride not found" });
-        }
-
-        // Driver 
-
-        // total rides of deiver
-        const totalRides = await MyRidesSchema.find({ driverId : RideInProgress.driverId });
-        let sum = 0; let avg = 0;
-        
-        for(let i = 0; i <= totalRides.length; i++){
-          sum += totalRides[i].rating;
-        }
-    
-        const driverPayload = { 
-            inProgress : false, 
-            $inc : { rideCount : 1 },
-            rating : (sum/totalRides.length).toFixed(1)    
-        }
-
-        const RideInProgress = await DriverSchema.findByIdAndUpdate({ _id : rideComplete.driverId }, driverPayload, { new : true });
-        if(!RideInProgress){
-            return res.status(200).json({ status : 401, message : "Failed to update driver's status" });
-        };
-
-  
-
-        //Passenger
-        // Increase Ride Count 
-        const RideCount = await UserSchema.findByIdAndUpdate({ _id : rideComplete.userId }, { $inc : { rideCount : 1 }}, { new : true });
-        if(!RideCount){
-            return res.status(200).json({ status : 401, message : "Fail to increasse ride count" });
-        };
-
-
-        // Assign Normal Coupon to Passenger after completed 5 rides
-        // '' '' '' 
-
-        // Notify for rating
-        try {
-            const resp = await SocketConfg.SendMessage(rideComplete.userId, "rating", { msg:"Rating", rideId : rideComplete._id });
-            if (resp) {
-                return res.status(200).json({ status : 201, message : "Success", data : rideComplete });
-            } else {
-                return res.status(200).json({ status: 401, message: "Failed to Accepted" });
-            }
-        } catch (error) {
-            console.error("ACCEPT RIDE :: sending socket message:", error);
-            return res.status(500).json({ error: "ACCEPT RIDE :: Failed to send socket message", message: error.message });
-        }
-
-    } catch (error) {
-        res.status(500).json({ error : error.message, message : "Failed to complete ride" });
-    }
-});
-
-
-
 // Start Ride With Verify OTP -- Driver Side
 router.put("/verifyOTP/:id", verifyDriver, async (req, res) => {
     const rideId = req.params.id; // ride id
@@ -341,6 +271,78 @@ router.put("/verifyOTP/:id", verifyDriver, async (req, res) => {
         res.status(500).json({ error : error.message, message : "Failed to verify otp" });
     }
 });
+
+
+
+
+// Complete Ride --- Driver Side
+router.get("/completeRide/:id", verifyDriver, async (req, res) => {
+    const _id = req.params.id;
+
+    try {
+        const fieldToUpdate = {
+            completed : true,
+            start : false,
+            accept : false
+        };
+
+        const rideComplete = await MyRidesSchema.findByIdAndUpdate(_id, fieldToUpdate, { new : true });
+        if(!rideComplete){
+            return res.status(200).json({ status : 401, message : "Ride not found" });
+        }
+
+        // Driver Section
+        // total rides of deiver
+        const totalRides = await MyRidesSchema.find({ driverId : RideInProgress.driverId });
+        let sum = 0; let avg = 0;
+        
+        for(let i = 0; i <= totalRides.length; i++){
+          sum += totalRides[i].rating;
+        }
+    
+        const driverPayload = { 
+            inProgress : false, 
+            $inc : { rideCount : 1 },
+            rating : (sum/totalRides.length).toFixed(1)    
+        }
+
+        const RideInProgress = await DriverSchema.findByIdAndUpdate({ _id : rideComplete.driverId }, driverPayload, { new : true });
+        if(!RideInProgress){
+            return res.status(200).json({ status : 401, message : "Failed to update driver's status" });
+        };
+
+  
+
+        // Passenger Section
+        // Increase Ride Count 
+        const RideCount = await UserSchema.findByIdAndUpdate({ _id : rideComplete.userId }, { $inc : { rideCount : 1 }}, { new : true });
+        if(!RideCount){
+            return res.status(200).json({ status : 401, message : "Fail to increasse ride count" });
+        };
+
+
+        // Assign Normal Coupon to Passenger after completed 5 rides
+        // '' '' '' 
+
+        // Notify for rating
+        try {
+            const resp = await SocketConfg.SendMessage(rideComplete.userId, "rating", { msg:"Rating", rideId : rideComplete._id });
+            if (resp) {
+                return res.status(200).json({ status : 201, message : "Success", data : rideComplete });
+            } else {
+                return res.status(200).json({ status: 401, message: "Failed to Accepted" });
+            }
+        } catch (error) {
+            console.error("ACCEPT RIDE :: sending socket message:", error);
+            return res.status(500).json({ error: "ACCEPT RIDE :: Failed to send socket message", message: error.message });
+        }
+
+    } catch (error) {
+        res.status(500).json({ error : error.message, message : "Failed to complete ride" });
+    }
+});
+
+
 
 
 
