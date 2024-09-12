@@ -87,6 +87,10 @@ const driverSchema = new mongoose.Schema({
     qrcode_Id: {
         type: String,
         trim: true
+    },
+    fcmToken : {
+        type : String,
+        trim : true
     }
 }, { timestamps : true });
 

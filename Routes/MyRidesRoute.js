@@ -5,7 +5,7 @@ const MyRidesSchema = require("../Mongooes/MyRidesSchema.js");
 const UserSchema = require("../Mongooes/UserSchema.js");
 const { FindDriver, FindAgain } = require("../Helpers/FindDriver.js");
 const { NewOTP } = require("../Helpers/OTP-Token.js");
-const NotifyService = require("../Helpers/NotificationService.js");
+const { NotifyService } = require("../Helpers/NotificationService.js");
 const SocketConfg = require("../Helpers/websocket.js");
 const DriverSchema = require("../Mongooes/DriverSchema.js");
 

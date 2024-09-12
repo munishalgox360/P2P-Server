@@ -5,7 +5,7 @@ const DriverSchema = require("../Mongooes/DriverSchema.js");
 const { accessToken, verifyToken, verifyDriver } = require("../Middlewares/auth.js");
 const bcrypt = require("bcryptjs");
 const { NewOTP } = require("../Helpers/OTP-Token.js");
-const NotifyService = require("../Helpers/NotificationService.js");
+const { NotifyService } = require("../Helpers/NotificationService.js");
 const { NewQrCode } = require("../Helpers/Payment.js");
 const { CalculateDistance } = require("../Helpers/DistanceCalculate.js");
 const SocketConfg = require("../Helpers/websocket.js");
@@ -15,7 +15,7 @@ const date = new Date();
 
 router.post("/register/passenger", async (req, res) => {
   try {
-    let { firstName, lastName, mobileNumber, email, password } = req.body;
+    let { firstName, lastName, mobileNumber, email, password, fcmToken } = req.body;
 
     const valid = [firstName, lastName, mobileNumber, email, password].some(v => v.trim() == "");
     if(valid){
@@ -34,7 +34,7 @@ router.post("/register/passenger", async (req, res) => {
    
     const NewPassenger = new UserSchema({
       firstName, lastName, mobileNumber, password, email,
-      isAdmin : req.body.isAdmin || false,
+      isAdmin : req.body.isAdmin || false, fcmToken : fcmToken,
       location: {
         type: "Point",
         coordinates : [0,0]
@@ -55,7 +55,7 @@ router.post("/register/passenger", async (req, res) => {
 
 router.post("/register/driver", async (req, res) => {
   try {
-    let { firstName, lastName, mobileNumber, email, password, vehName, vehNumber, vehSegment, licenceNumber, aadhaarNumber } = req.body;
+    let { firstName, lastName, mobileNumber, email, password, vehName, vehNumber, vehSegment, licenceNumber, aadhaarNumber, fcmToken } = req.body;
 
     const valid = [firstName, lastName, mobileNumber, email, password, vehName, vehNumber, vehSegment, licenceNumber, aadhaarNumber].some(v => v.trim() == "");
     if(valid){
@@ -74,7 +74,7 @@ router.post("/register/driver", async (req, res) => {
     
     const NewDriver = new DriverSchema({
       firstName, lastName, mobileNumber, email, password, 
-      vehName, vehNumber, vehSegment, licenceNumber, aadhaarNumber, 
+      vehName, vehNumber, vehSegment, licenceNumber, aadhaarNumber, fcmToken,
       verify : true,
       location: {
         type: "Point",
